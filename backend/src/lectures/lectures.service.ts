@@ -6,8 +6,9 @@ import { Lecture, LectureDocument } from './lecture.schema';
 
 @Injectable()
 export class LecturesService {
-  constructor(@InjectModel(Lecture.name) private lectureModel: Model<LectureDocument>) {}
-    
+  constructor(
+    @InjectModel(Lecture.name) private lectureModel: Model<LectureDocument>,
+  ) {}
 
   async create(createLectureDto: CreateLectureDto): Promise<Lecture> {
     const createdLecture = new this.lectureModel(createLectureDto);
@@ -19,10 +20,14 @@ export class LecturesService {
   }
 
   async getLecture(name: string): Promise<Lecture> {
-    return this.lectureModel.findOne({name: name}).exec();
+    return this.lectureModel.findOne({ name: name }).exec();
   }
 
-  async getLecturesInCharge(teacher: string): Promise<Lecture[]>{
-    return this.lectureModel.find({teacher: teacher}).exec();
+  async getLecturesInCharge(teacher: string): Promise<Lecture[]> {
+    return this.lectureModel.find({ teacher: teacher }).exec();
+  }
+
+  async deleteLecture(name: string): Promise<Lecture> {
+    return this.lectureModel.findOneAndDelete({ name: name });
   }
 }

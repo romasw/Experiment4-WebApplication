@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CreateLectureDto } from './create-lecture.dto';
 import { Lecture } from './lecture.schema';
 import { LecturesService } from './lectures.service';
@@ -29,5 +29,10 @@ export class LecturesController {
     @Param("teacher") teacher: string,
   ): Promise<Lecture[]>{
     return this.lecturesService.getLecturesInCharge(teacher);
+  }
+
+  @Delete()
+  async deleteLecture(@Body('name') name: string): Promise<Lecture> {
+    return this.lecturesService.deleteLecture(name);
   }
 }

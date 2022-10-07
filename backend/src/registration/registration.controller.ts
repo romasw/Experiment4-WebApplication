@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CreateRegistrationDto } from './create-registration.dto';
 import { Registration } from './registration.schema';
 import { RegistrationService } from './registration.service';
@@ -19,15 +19,22 @@ export class RegistrationController {
 
   @Get('student/:student')
   async getRegisteredLectures(
-    @Param("student") student: string,
+    @Param('student') student: string,
   ): Promise<Registration[]> {
     return this.registrationService.getRegisteredLectures(student);
   }
 
   @Get('lecture/:lecture')
   async getRegisteredStudents(
-    @Param("lecture") lecture: string,
+    @Param('lecture') lecture: string,
   ): Promise<Registration[]> {
     return this.registrationService.getRegisteredLectures(lecture);
+  }
+
+  @Delete()
+  async deleteLecture(
+    @Body() registaration: Registration,
+  ): Promise<Registration> {
+    return this.registrationService.deleteRegistration(registaration);
   }
 }
