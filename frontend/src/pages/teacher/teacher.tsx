@@ -10,14 +10,14 @@ import { Button } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Lecture } from "../../interface/lecture.interface";
-import { Row } from "../../interface/row.interface";
+import { TeacherRow } from "../../interface/row.teacher.interface";
 
 export const Teacher = () => {
   const { teacher } = useParams<{ teacher: string }>();
   const [lectures, setLectures] = useState<Lecture[]>([]);
   const days = ["日", "月", "火", "水", "木", "金", "土"];
 
-  const rows: Row[] = [];
+  const rows: TeacherRow[] = [];
 
   lectures.forEach((lecture: Lecture) => {
     rows.push({
