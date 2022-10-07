@@ -46,16 +46,17 @@ export const CancelLecture = (props: any) => {
 
   useEffect(() => {
     (async () => {
-      setLectures([]);
-      registeredLectures.forEach(async (registeredLecture: Registration) => {
+      const newLectures: Lecture[] = [];
+      for (var registeredLecture of registeredLectures) {
         await axios
           .get(
             `http://localhost:3001/lectures/lecture/${registeredLecture.lecture}`
           )
           .then((res) => {
-            setLectures((lectures) => [...lectures, res.data]);
+            newLectures.push(res.data);
           });
-      });
+      }
+      setLectures(newLectures);
     })();
   }, [registeredLectures]);
 

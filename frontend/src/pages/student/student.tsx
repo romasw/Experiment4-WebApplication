@@ -48,18 +48,21 @@ export const Student = () => {
 
   useEffect(() => {
     (async () => {
-      setLectures([]);
-      setCreditTotal(0);
-      registeredLectures.forEach(async (registeredLecture: Registration) => {
+      const newLectures: Lecture[] = [];
+      let newCreditTotal: number = 0;
+      for (var registeredLecture of registeredLectures) {
         await axios
           .get(
             `http://localhost:3001/lectures/lecture/${registeredLecture.lecture}`
           )
+          // eslint-disable-next-line
           .then((res) => {
-            setLectures((lectures) => [...lectures, res.data]);
-            setCreditTotal((creditTotal) => creditTotal + res.data.credit);
+            newLectures.push(res.data);
+            newCreditTotal = newCreditTotal + res.data.credit;
           });
-      });
+      }
+      setLectures(newLectures);
+      setCreditTotal(newCreditTotal);
     })();
   }, [registeredLectures]);
 
