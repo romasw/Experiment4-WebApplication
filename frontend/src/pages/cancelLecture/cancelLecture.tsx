@@ -13,13 +13,11 @@ import { Lecture } from "../../interface/lecture.interface";
 import { StudentRow } from "../../interface/row.student.interface";
 import { Registration } from "../../interface/registration.interface";
 
-const CREDIT_FOR_GRADUATION = 30;
-
-export const Student = () => {
+export const CancelLecture = (props: any) => {
   const navigate = useNavigate();
   const { student } = useParams<{ student: string }>();
+  const [count, setCount] = useState<number>(0);
   const [lectures, setLectures] = useState<Lecture[]>([]);
-  const [creditTotal, setCreditTotal] = useState<number>(0);
   const [registeredLectures, setRegisteredLectures] = useState<Registration[]>(
     []
   );
@@ -49,7 +47,6 @@ export const Student = () => {
   useEffect(() => {
     (async () => {
       setLectures([]);
-      setCreditTotal(0);
       registeredLectures.forEach(async (registeredLecture: Registration) => {
         await axios
           .get(
@@ -57,7 +54,6 @@ export const Student = () => {
           )
           .then((res) => {
             setLectures((lectures) => [...lectures, res.data]);
-            setCreditTotal((creditTotal) => creditTotal + res.data.credit);
           });
       });
     })();
@@ -67,50 +63,28 @@ export const Student = () => {
     color: "red",
     textAlign: "center",
   });
-  const Div2 = styled("div")({
-    display: "flex",
-    justifyContent: "center",
-  });
-  const Divbutton = styled("div")({
-    display: "flex",
-    justifyContent: "center",
-  });
   const Divp = styled("div")({
     fontSize: 36,
     color: "blue",
   });
-  const CustomP = styled("p")({
-    margin: "0 3rem",
-  });
+
+  const handleSubmit = async (lecture: string) => {
+    await axios.delete("http://localhost:3001/registration", {
+      data: {
+        student: student,
+        lecture: lecture,
+      },
+    });
+    setCount(count + 1);
+  };
 
   return (
     <>
-      <title>履修中の科目</title>
+      <title>履修取消</title>
 
       <CustomDiv>
-        <h1>{student}さんの履修中科目</h1>
+        <h1>履修取消</h1>
       </CustomDiv>
-      <Div2>
-        <CustomP>卒業必要単位: {CREDIT_FOR_GRADUATION}</CustomP>
-        <CustomP>獲得予定単位: {creditTotal} </CustomP>
-        <CustomP>卒業まであと: {CREDIT_FOR_GRADUATION - creditTotal}</CustomP>
-      </Div2>
-      <Divbutton>
-        <Button
-          variant="contained"
-          style={{ margin: "0 3rem" }}
-          onClick={() => navigate(`/student/${student}/registration`)}
-        >
-          履修登録
-        </Button>
-        <Button
-          variant="outlined"
-          style={{ margin: "0 2rem" }}
-          onClick={() => navigate(`/student/${student}/cancellation`)}
-        >
-          履修取消
-        </Button>
-      </Divbutton>
       <Divp>
         <p>現在履修中の科目</p>
       </Divp>
@@ -122,6 +96,7 @@ export const Student = () => {
               <TableCell align="right">時間</TableCell>
               <TableCell align="right">担当教員名</TableCell>
               <TableCell align="right">単位数</TableCell>
+              <TableCell align="center"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -136,6 +111,13 @@ export const Student = () => {
                 <TableCell align="right">{row.time}</TableCell>
                 <TableCell align="right">{row.teacher}</TableCell>
                 <TableCell align="right">{row.credit}</TableCell>
+                <TableCell align="center">
+                  <form onSubmit={() => handleSubmit(row.name)}>
+                    <Button variant="contained" type="submit">
+                      履修を取り消す
+                    </Button>
+                  </form>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -144,7 +126,7 @@ export const Student = () => {
       <CustomDiv>
         <Button
           variant="outlined"
-          onClick={() => navigate(`/`)}
+          onClick={() => navigate(`/student/${student}/`)}
           sx={{ margin: "4rem" }}
         >
           戻る
