@@ -7,6 +7,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Button } from "@mui/material";
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { create } from '@mui/material/styles/createTransitions';
+import { Lecture } from '../../interface/lecture.interface';
 
 function createData(
   subject: string,
@@ -16,15 +21,32 @@ function createData(
   return { subject, classes, time };
 }
 
-const rows = [
-  createData('科目A', '5I', 'n1曜日n1時間目'),
-  createData('科目B', '5I', 'n2曜日n2時間目'),
-  createData('科目C', '4I', 'n3曜日n3時間目'),
-  createData('科目D', '3I', 'n4曜日n4時間目'),
-  createData('科目E', '2I', 'n5曜日n5時間目'),
-];
-
 export const Teacher = () => {
+  const teacher = useParams();
+  const [lectures, setLectures] = useState<Lecture[]>([]);
+  const days = ["日","月","火","水","木","金","土"];
+
+  // const rows = [
+  //   createData('科目A', '5I', 'n1曜日n1時間目'),
+  //   createData('科目B', '5I', 'n2曜日n2時間目'),
+  //   createData('科目C', '4I', 'n3曜日n3時間目'),
+  //   createData('科目D', '3I', 'n4曜日n4時間目'),
+  //   createData('科目E', '2I', 'n5曜日n5時間目'),
+  // ];
+
+  const rows: Lecture[] = [] 
+  lectures.forEach((lecture: Lecture) => {
+    rows.push(createData(lecture.name, lecture.year.toString()+lecture.major, days[lecture.day]+"曜日"+lecture.period.toString()+"限"))
+  })
+
+  useEffect(()=> {
+    (async ()=>{
+      await axios.get("http://localhost:3001/lectures/teacher/" + teacher)
+      .then(res=> {
+        setLectures(res.data);
+      })
+    })();
+  },[]); 
 
     return(
       <div>
