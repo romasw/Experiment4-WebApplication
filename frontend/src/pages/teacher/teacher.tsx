@@ -7,12 +7,13 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
 import { Button } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Lecture } from "../../interface/lecture.interface";
 import { TeacherRow } from "../../interface/row.teacher.interface";
 
 export const Teacher = () => {
+  const navigate = useNavigate();
   const { teacher } = useParams<{ teacher: string }>();
   const [lectures, setLectures] = useState<Lecture[]>([]);
   const days = ["日", "月", "火", "水", "木", "金", "土"];
@@ -61,14 +62,28 @@ export const Teacher = () => {
                 </TableCell>
                 <TableCell align="right">{row.classroom}</TableCell>
                 <TableCell align="right">{row.time}</TableCell>
-                <TableCell align="right">
-                  <Button variant="contained">履修学生一覧</Button>
+                <TableCell align="center">
+                  <Button
+                    variant="contained"
+                    onClick={() => navigate(`/teacher/${teacher}/${row.name}`)}
+                  >
+                    履修学生一覧
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <div style={{ textAlign: "center" }}>
+        <Button
+          variant="outlined"
+          onClick={() => navigate(`/`)}
+          sx={{ margin: "4rem" }}
+        >
+          戻る
+        </Button>
+      </div>
     </div>
   );
 };

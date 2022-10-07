@@ -28,7 +28,7 @@ export class RegistrationController {
   async getRegisteredStudents(
     @Param('lecture') lecture: string,
   ): Promise<Registration[]> {
-    return this.registrationService.getRegisteredLectures(lecture);
+    return this.registrationService.getRegisteredStudents(lecture);
   }
 
   @Delete()

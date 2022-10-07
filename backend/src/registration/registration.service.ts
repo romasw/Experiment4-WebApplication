@@ -28,7 +28,7 @@ export class RegistrationService {
     return await this.registrationModel.find({ student: student }).exec();
   }
 
-  async getRegisteredgetStudents(lecture: string): Promise<Registration[]> {
+  async getRegisteredStudents(lecture: string): Promise<Registration[]> {
     return await this.registrationModel.find({ lecture: lecture }).exec();
   }
 
