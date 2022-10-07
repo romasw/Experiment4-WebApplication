@@ -1,16 +1,28 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateLectureDto } from './create-lecture.dto';
-import { Lecture } from './lecture.interface';
+import { Lecture, LectureDocument } from './lecture.schema';
 
 @Injectable()
 export class LecturesService {
-  private readonly lectures: Lecture[] = [];
+  constructor(@InjectModel(Lecture.name) private lectureModel: Model<LectureDocument>) {}
+    
 
-  create(createLectureDto: CreateLectureDto) {
-    this.lectures.push(createLectureDto);
+  async create(createLectureDto: CreateLectureDto): Promise<Lecture> {
+    const createdLecture = new this.lectureModel(createLectureDto);
+    return createdLecture.save();
   }
 
-  findAll(): Lecture[] {
-    return this.lectures;
+  async getLectures(): Promise<Lecture[]> {
+    return this.lectureModel.find().exec();
+  }
+
+  async getLecture(name: string): Promise<Lecture> {
+    return this.lectureModel.findOne({name: name}).exec();
+  }
+
+  async getLecturesInCharge(teacher: string): Promise<Lecture[]>{
+    return this.lectureModel.find({teacher: teacher}).exec();
   }
 }
