@@ -29,7 +29,6 @@ export const Teacher = () => {
 
   useEffect(() => {
     (async () => {
-      console.log(`http://localhost:3001/lectures/teacher/${teacher}`);
       await axios
         .get(`http://localhost:3001/lectures/teacher/${teacher}`)
         .then((res: any) => {
