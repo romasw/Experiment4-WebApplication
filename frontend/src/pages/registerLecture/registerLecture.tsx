@@ -74,7 +74,7 @@ export const RegisterLecture = (props: any) => {
     color: "blue",
   });
 
-  const handleSubmit = async (lecture: string) => {
+  const handleClick = async (lecture: string) => {
     await axios.post("http://localhost:3001/registration", {
       student: student,
       lecture: lecture,
@@ -118,7 +118,7 @@ export const RegisterLecture = (props: any) => {
                 <TableCell align="center">
                   <Button
                     variant="contained"
-                    onClick={() => handleSubmit(row.name)}
+                    onClick={() => handleClick(row.name)}
                   >
                     履修する
                   </Button>
