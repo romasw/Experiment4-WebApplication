@@ -42,7 +42,7 @@ export const CancelLecture = (props: any) => {
           setRegisteredLectures(res.data);
         });
     })();
-  }, [student]);
+  }, [student, count]);
 
   useEffect(() => {
     (async () => {
@@ -69,7 +69,7 @@ export const CancelLecture = (props: any) => {
     color: "blue",
   });
 
-  const handleSubmit = async (lecture: string) => {
+  const handleClick = async (lecture: string) => {
     await axios.delete("http://localhost:3001/registration", {
       data: {
         student: student,
@@ -113,11 +113,12 @@ export const CancelLecture = (props: any) => {
                 <TableCell align="right">{row.teacher}</TableCell>
                 <TableCell align="right">{row.credit}</TableCell>
                 <TableCell align="center">
-                  <form onSubmit={() => handleSubmit(row.name)}>
-                    <Button variant="contained" type="submit">
-                      履修を取り消す
-                    </Button>
-                  </form>
+                  <Button
+                    variant="contained"
+                    onClick={() => handleClick(row.name)}
+                  >
+                    履修を取り消す
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

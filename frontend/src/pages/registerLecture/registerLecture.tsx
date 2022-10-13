@@ -43,7 +43,7 @@ export const RegisterLecture = (props: any) => {
           setRegisteredLectures(lectures);
         });
     })();
-  }, [student]);
+  }, [student, count]);
 
   useEffect(() => {
     (async () => {
@@ -63,7 +63,7 @@ export const RegisterLecture = (props: any) => {
       });
       setLectures(notRegisteredLectures);
     })();
-  }, [registeredLectures, count]);
+  }, [registeredLectures]);
 
   const CustomDiv = styled("div")({
     color: "red",
@@ -116,11 +116,12 @@ export const RegisterLecture = (props: any) => {
                 <TableCell align="right">{row.teacher}</TableCell>
                 <TableCell align="right">{row.credit}</TableCell>
                 <TableCell align="center">
-                  <form onSubmit={() => handleSubmit(row.name)}>
-                    <Button variant="contained" type="submit">
-                      履修する
-                    </Button>
-                  </form>
+                  <Button
+                    variant="contained"
+                    onClick={() => handleSubmit(row.name)}
+                  >
+                    履修する
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
